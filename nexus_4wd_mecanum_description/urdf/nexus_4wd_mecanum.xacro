@@ -170,7 +170,7 @@
     <child link="upper_left_wheel" />
     <axis xyz="0 1 0"/>
   </joint>
-  
+
   <link name="upper_left_wheel">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -259,7 +259,7 @@
         izz="0.000324824"/>
     </inertial>
   </link>
-  
+
   <joint name="lower_right_wheel_joint" type="continuous">
     <origin xyz="0 0.042 0" rpy="0 0 0" />
     <parent link="lower_right_wheel_shaft"/>
@@ -355,6 +355,95 @@
       <material name="black" />
     </visual>
   </link>
+
+  <link name="plate_link">
+    <inertial>
+      <origin
+        xyz="0.118194757262245 -0.00844020076328886 -0.0612822594819591"
+        rpy="0 0 0" />
+      <mass value="0.054" />
+      <inertia
+        ixx="3.465E-05"
+        ixy="5.47239752789428E-21"
+        ixz="-2.69326661667124E-21"
+        iyy="3.465E-05"
+        iyz="-4.0386530925085E-21"
+        izz="3.69E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/joint.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/joint.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="plate_base" type="fixed">
+    <origin xyz="-0.025 -0.008 -0.004" rpy="${PI/2} 0 0" />
+    <parent link="base_link" />
+    <child link="plate_link" />
+    <axis xyz="0 0 1" />
+  </joint>
+
+  <link name="plate">
+    <inertial>
+      <origin
+        xyz="0.0183189655172414 -2.42861286636753E-17 0.00611197247335394"
+        rpy="0 0 0" />
+      <mass value="0.696" />
+      <inertia
+        ixx="0.00285380905172414"
+        ixy="7.5844954052083E-19"
+        ixz="-0.000469881465517241"
+        iyy="0.00164274224137931"
+        iyz="3.65449873336129E-19"
+        izz="0.00281453318965517" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/plate.STL" />
+      </geometry>
+      <material
+        name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://nexus_4wd_mecanum_description/meshes/plate.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="plate_joint" type="prismatic">
+    <origin xyz="0.118 0.115 -0.0085" rpy="${3*PI/2} ${PI} 0" />
+    <parent link="plate_link" />
+    <child link="plate" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="0.06" effort="1000" velocity="0.2" />
+  </joint>
+  
+  <transmission name="lift_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="plate_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface </hardwareInterface>
+    </joint>  
+    <actuator name="lift_motor">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 
   <!-- Include controller plugin for Gazebo -->
   <xacro:include filename="$(find nexus_4wd_mecanum_description)/urdf/nexus_4wd_mecanum.gazebo" />

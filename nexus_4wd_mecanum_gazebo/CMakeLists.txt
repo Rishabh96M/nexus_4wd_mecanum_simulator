@@ -40,6 +40,11 @@ catkin_package(
 add_library(nexus_ros_force_based_move src/nexus_ros_force_based_move.cpp)
 target_link_libraries(nexus_ros_force_based_move ${Boost_LIBRARIES} ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES})
 
+add_executable(move_all src/move_all.cpp)
+target_link_libraries(move_all ${catkin_LIBRARIES})
+
+add_executable(move_1 src/move.cpp)
+target_link_libraries(move_1 ${catkin_LIBRARIES})
 #############
 ## Install ##
 #############

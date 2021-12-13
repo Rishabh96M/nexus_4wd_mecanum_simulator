@@ -4,21 +4,30 @@
   <arg name="gui" default="true" />
   <arg name="headless" default="false" />
   <!-- <arg name="world_name" default="$(find nexus_gazebo)/worlds/nexus_4wd_mecanum.world" /> -->
-
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
+     <arg name="world_name" value="$(find nexus_4wd_mecanum_description)/world/swarm.world"/>
     <arg name="debug" value="0" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="use_sim_time" value="$(arg use_sim_time)" />
     <arg name="headless" value="$(arg headless)" />
     <!-- <arg name="world_name" value="$(arg world_name)" /> -->
-    <arg name="paused" value="false"/>
+    <arg name="paused" value="false"/> 
   </include>
 
-<!-- Load robot description -->
-<include file="$(find nexus_4wd_mecanum_description)/launch/nexus_4wd_mecanum_description.launch" />
+  <!-- Load robot description -->
+  <include file="$(find nexus_4wd_mecanum_description)/launch/nexus_4wd_mecanum_description.launch" />
 
   <!-- Spawn the robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -model nexus_4wd_mecanum -param robot_description -x 0 -y 0 -z 0.5" />
+        
+  <!--<rosparam file="$(find nexus_4wd_mecanum_description)/config/controllers.yaml" command="load"/>
+  
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+  
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    	output="screen" ns="/nexus_4wd_mecanum" args="joint_state_controller platform_controller" /> -->
 
 </launch>

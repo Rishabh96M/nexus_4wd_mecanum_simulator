@@ -67,6 +67,7 @@ namespace gazebo {
 
       /// \brief A pointer to the Link, where force is applied
       physics::LinkPtr link_;
+      physics::LinkPtr platform_;
 
       /// \brief The Link this plugin is attached to, and will exert forces on.
       private: std::string link_name_;
@@ -102,6 +103,7 @@ namespace gazebo {
 
       double x_;
       double y_;
+      double z_;
       double rot_;
       bool alive_;
       common::Time last_odom_publish_time_;

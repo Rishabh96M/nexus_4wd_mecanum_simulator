@@ -11,6 +11,7 @@
       <odometryFrame>odom</odometryFrame>
       <odometryRate>25.0</odometryRate>
       <robotBaseFrame>base_footprint</robotBaseFrame>
+      <platformJoint>plate</platformJoint>
       <cmdVelTimeOut>0.25</cmdVelTimeOut>
       <publishOdometryTf>0</publishOdometryTf>
       <yaw_velocity_p_gain>1.0</yaw_velocity_p_gain>

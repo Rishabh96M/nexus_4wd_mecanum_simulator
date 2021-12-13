@@ -122,6 +122,7 @@ namespace gazebo
     ROS_INFO_STREAM("robotBaseFrame for force based move plugin: " << robot_base_frame_  << "\n");
 
     this->link_ = parent->GetLink(robot_base_frame_);
+    this->platform_ = parent->GetLink(sdf->GetElement("platformJoint")->Get<std::string>());
 
     odometry_rate_ = 20.0;
     if (!sdf->HasElement("odometryRate")) 
@@ -175,6 +176,7 @@ namespace gazebo
 #endif
     x_ = 0;
     y_ = 0;
+    z_ = 0;
     rot_ = 0;
     alive_ = true;
 
@@ -230,6 +232,7 @@ namespace gazebo
     if ((parent_->GetWorld()->SimTime() - last_cmd_vel_time_) > cmd_vel_time_out_) {
       x_ = 0.0;
       y_ = 0.0;
+      z_ = 0.0;
       rot_ = 0.0;
     }
 
@@ -246,6 +249,8 @@ namespace gazebo
     link_->AddRelativeForce(ignition::math::Vector3d((std::min(x_, max_x_velocity) - linear_vel.X())* force_x_velocity_p_gain_,
                                                      (std::min(y_, max_x_velocity) - linear_vel.Y())* force_y_velocity_p_gain_,
                                                       0.0));
+                                                      
+    platform_->AddRelativeForce(ignition::math::Vector3(0.0, 0.0, z_)); 
 #else
     math::Pose pose = parent_->GetWorldPose();
 
@@ -269,6 +274,8 @@ namespace gazebo
     link_->AddRelativeForce(math::Vector3((std::min(x_, max_x_velocity) - linear_vel.x)* force_x_velocity_p_gain_,
                                           (std::min(y_, max_x_velocity) - linear_vel.y)* force_y_velocity_p_gain_,
                                            0.0));
+                                           
+    platform_->AddRelativeForce(math::Vector3(0.0, 0.0, z_));                                       
 #endif
     //parent_->PlaceOnNearestEntityBelow();
     //parent_->SetLinearVel(math::Vector3(
@@ -307,6 +314,7 @@ namespace gazebo
     boost::mutex::scoped_lock scoped_lock(lock);
     x_ = cmd_msg->linear.x;
     y_ = cmd_msg->linear.y;
+    z_ = cmd_msg->linear.z;
     rot_ = cmd_msg->angular.z;
 
 #if (GAZEBO_MAJOR_VERSION >= 8)
