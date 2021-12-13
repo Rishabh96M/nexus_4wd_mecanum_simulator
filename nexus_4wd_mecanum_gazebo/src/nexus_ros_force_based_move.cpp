@@ -250,7 +250,7 @@ namespace gazebo
                                                      (std::min(y_, max_x_velocity) - linear_vel.Y())* force_y_velocity_p_gain_,
                                                       0.0));
                                                       
-    platform_->AddRelativeForce(ignition::math::Vector3(0.0, 0.0, z_)); 
+    platform_->AddRelativeForce(ignition::math::Vector3d(0.0, 0.0, z_)); 
 #else
     math::Pose pose = parent_->GetWorldPose();
 
